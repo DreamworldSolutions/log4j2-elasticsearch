@@ -94,6 +94,7 @@ For advanced usage, there are the following settings:
 
 | Log4j2 Elasticsearch appender   | Elasticssearch Version | Release date |
 | --------------------------------| -----------------------|--------------|
+| 2.3.4.0                         | 2.3.4                  | Jul 30, 2016 |
 | 1.7.2.0                         | 1.7.2                  | Sep 16, 2015 |
 | 1.4.0.1                         | 1.4.0                  | Nov 21, 2014 |
 | 1.4.0.0                         | 1.4.0                  | Nov 12, 2014 |
