@@ -41,7 +41,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.compile.version>1.7</java.compile.version>
         <log4j2.version>2.2</log4j2.version>
-        <elasticsearch.version>1.7.2</elasticsearch.version>
+        <elasticsearch.version>2.3.4</elasticsearch.version>
     </properties>
 
     <dependencies>

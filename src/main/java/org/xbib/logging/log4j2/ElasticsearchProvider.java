@@ -15,6 +15,8 @@
  */
 package org.xbib.logging.log4j2;
 
+import java.net.InetSocketAddress;
+
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.config.plugins.PluginAttribute;
@@ -26,8 +28,6 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.unit.ByteSizeValue;
 import org.elasticsearch.common.unit.TimeValue;
-
-import static org.elasticsearch.common.settings.ImmutableSettings.settingsBuilder;
 
 @Plugin(name = "Elasticsearch", category = "Core", printObject = true)
 public class ElasticsearchProvider implements NoSqlProvider<ElasticsearchConnection> {
@@ -105,7 +105,7 @@ public class ElasticsearchProvider implements NoSqlProvider<ElasticsearchConnect
             maxVolumePerBulkRequest = "10m";
         }
 
-        Settings settings = settingsBuilder()
+        Settings settings = Settings.builder()
                 .put("cluster.name", cluster)
                 .put("network.server", false)
                 .put("node.client", true)
@@ -115,8 +115,8 @@ public class ElasticsearchProvider implements NoSqlProvider<ElasticsearchConnect
                 .put("client.transport.nodes_sampler_interval", "30s")
                 .build();
 
-        TransportClient client = new TransportClient(settings, false);
-        client.addTransportAddress(new InetSocketTransportAddress(host, port));
+        TransportClient client =  TransportClient.builder().settings(settings).build();
+        client.addTransportAddress(new InetSocketTransportAddress(new InetSocketAddress(host, port)));
         if (client.connectedNodes().isEmpty()) {
             logger.error("unable to connect to Elasticsearch cluster");
             return null;
@@ -124,8 +124,8 @@ public class ElasticsearchProvider implements NoSqlProvider<ElasticsearchConnect
         String description = "cluster=" + cluster + ",host=" + host + ",port=" + port + ",index=" + index + ",type=" + type;
         ElasticsearchTransportClient elasticsearchTransportClient = new ElasticsearchTransportClient(client, index, type,
                 maxActionsPerBulkRequest, maxConcurrentBulkRequests,
-                ByteSizeValue.parseBytesSizeValue(maxVolumePerBulkRequest),
-                TimeValue.parseTimeValue(flushInterval, TimeValue.timeValueSeconds(30)));
+                ByteSizeValue.parseBytesSizeValue(maxVolumePerBulkRequest,""),
+                TimeValue.parseTimeValue(flushInterval, TimeValue.timeValueSeconds(30), ""));
         ElasticsearchProvider elasticsearchProvider = new ElasticsearchProvider(elasticsearchTransportClient, description);
         
         return elasticsearchProvider;

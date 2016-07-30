@@ -15,7 +15,11 @@
  */
 package org.xbib.logging.log4j2;
 
-import org.elasticsearch.ElasticsearchIllegalStateException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.elasticsearch.action.bulk.BulkProcessor;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
@@ -24,11 +28,6 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.unit.ByteSizeValue;
 import org.elasticsearch.common.unit.TimeValue;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ElasticsearchTransportClient {
 
@@ -73,7 +72,7 @@ public class ElasticsearchTransportClient {
 
     public ElasticsearchTransportClient index(Map<String, Object> source) {
         if (((TransportClient)client).connectedNodes().isEmpty()) {
-            throw new ElasticsearchIllegalStateException("client is disconnected");
+            throw new RuntimeException("client is disconnected");
         }
 
         String index = this.index.indexOf('\'') < 0 ? this.index : getIndexNameDateFormat(this.index).format(new Date());
