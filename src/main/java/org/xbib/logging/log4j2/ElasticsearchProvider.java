@@ -107,9 +107,6 @@ public class ElasticsearchProvider implements NoSqlProvider<ElasticsearchConnect
 
         Settings settings = Settings.builder()
                 .put("cluster.name", cluster)
-                .put("network.server", false)
-                .put("node.client", true)
-                .put("client.transport.sniff", true)
                 .put("client.transport.ping_timeout", timeout)
                 .put("client.transport.ignore_cluster_name", false)
                 .put("client.transport.nodes_sampler_interval", "30s")
