@@ -10,7 +10,7 @@
 
     <groupId>org.xbib.logging.log4j2</groupId>
     <artifactId>log4j2-elasticsearch</artifactId>
-    <version>2.3.4.1</version>
+    <version>5.4.3.0</version>
     <packaging>jar</packaging>
 
     <inceptionYear>2014</inceptionYear>
@@ -41,7 +41,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.compile.version>1.7</java.compile.version>
         <log4j2.version>2.2</log4j2.version>
-        <elasticsearch.version>2.3.4</elasticsearch.version>
+        <elasticsearch.version>5.4.3</elasticsearch.version>
+        <elasticsearch.transport-client.version>5.4.3</elasticsearch.transport-client.version>
     </properties>
 
     <dependencies>
@@ -55,9 +56,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.elasticsearch</groupId>
-            <artifactId>elasticsearch</artifactId>
-            <version>${elasticsearch.version}</version>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>transport</artifactId>
+            <version>${elasticsearch.transport-client.version}</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>

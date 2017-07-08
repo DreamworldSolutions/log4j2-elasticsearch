@@ -15,19 +15,21 @@
  */
 package org.xbib.logging.log4j2;
 
-import java.net.InetSocketAddress;
-
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.config.plugins.PluginAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginFactory;
 import org.apache.logging.log4j.nosql.appender.NoSqlProvider;
 import org.apache.logging.log4j.status.StatusLogger;
+import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.unit.ByteSizeValue;
 import org.elasticsearch.common.unit.TimeValue;
+import org.elasticsearch.transport.client.PreBuiltTransportClient;
+
+import java.net.InetSocketAddress;
 
 @Plugin(name = "Elasticsearch", category = "Core", printObject = true)
 public class ElasticsearchProvider implements NoSqlProvider<ElasticsearchConnection> {
@@ -112,9 +114,9 @@ public class ElasticsearchProvider implements NoSqlProvider<ElasticsearchConnect
                 .put("client.transport.nodes_sampler_interval", "30s")
                 .build();
 
-        TransportClient client =  TransportClient.builder().settings(settings).build();
-        client.addTransportAddress(new InetSocketTransportAddress(new InetSocketAddress(host, port)));
-        if (client.connectedNodes().isEmpty()) {
+        Client client = new PreBuiltTransportClient(settings)
+            .addTransportAddress(new InetSocketTransportAddress(new InetSocketAddress(host, port)));
+        if (((TransportClient)client).connectedNodes().isEmpty()) {
             logger.error("unable to connect to Elasticsearch cluster");
             return null;
         }
